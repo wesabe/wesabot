@@ -1,0 +1,6 @@
+# config file for DeployPlugin
+repository_base_path: /src
+default_project: my_super_site
+project:
+  my_super_site:
+    deployed_revision_url: http://www.example.com/REVISION

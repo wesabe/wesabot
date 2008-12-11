@@ -1,0 +1,4 @@
+# Configuration file for TweetPlugin
+username: your_twitter_username
+password: your_twitter_password
+proxy: http://your.proxy.com:8080 # optional
