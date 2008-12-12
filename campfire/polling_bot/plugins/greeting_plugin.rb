@@ -43,7 +43,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   # return array of available commands and descriptions
   def help
     [['(disable|turn off) greetings', "don't say hi when you log in (you grump)"],
-     ['(eanable|turn on) greetings', "say hi when you log in"],
+     ['(enable|turn on) greetings', "say hi when you log in"],
      ['toggle greetings', "disable greetings if enabled, enable if disabled. You know--toggle."],
      ['catch me up|ketchup', "gives you a link to the point in the transcript where you last logged out"]
     ]
