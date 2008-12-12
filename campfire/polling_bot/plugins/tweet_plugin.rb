@@ -31,7 +31,7 @@ class TweetPlugin < Campfire::PollingBot::Plugin
   
   # strip links from CF messages
   def strip_links(msg)
-    msg.gsub(/<a href="(.*?)">.*?<\/a>/, '\1')
+    msg.gsub(/<a href="([^"]*)".*?>.*?<\/a>/, '\1')
   end
   
   # post a message to twitter
