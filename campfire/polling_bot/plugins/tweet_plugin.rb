@@ -13,7 +13,7 @@ class TweetPlugin < Campfire::PollingBot::Plugin
   
   # return array of available commands and descriptions
   def help
-    [['(tweet|twitter): <message>', "post <message> to WesabeUpdate's twitter account"]]
+    [['(tweet|twitter): <message>', "post <message> to #{config['username']}'s twitter account"]]
   end
   
   private

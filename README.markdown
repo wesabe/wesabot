@@ -44,7 +44,7 @@ That list currently looks like:
     GreetingPlugin:
      - (disable|turn off) greetings
          don't say hi when you log in (you grump)
-     - (eanable|turn on) greetings
+     - (enable|turn on) greetings
          say hi when you log in
      - toggle greetings
          disable greetings if enabled, enable if disabled. You know--toggle.
@@ -85,4 +85,4 @@ That list currently looks like:
 
     TweetPlugin:
      - (tweet|twitter): <message>
-         post <message> to WesabeUpdate's twitter account
+         post <message> to a twitter account
