@@ -5,8 +5,9 @@ class TweetPlugin < Campfire::PollingBot::Plugin
   def process(message)
     case message.command
     when /^(?:tweet|twitter):?\s*("?)(.*?)\1$/i
-      send($2)
-      bot.say("Ok, tweeted: #{$2}")
+      msg = strip_links($2)
+      send(msg)
+      bot.say("Ok, tweeted: #{msg}")
       return HALT
     end
   end
@@ -26,6 +27,11 @@ class TweetPlugin < Campfire::PollingBot::Plugin
       @client.set_auth("http://twitter.com", config['username'], config['password'])
     end
     return @client
+  end
+  
+  # strip links from CF messages
+  def strip_links(msg)
+    msg.gsub(/<a href.*?>(.*?)<\/a>/, '\1')
   end
   
   # post a message to twitter
