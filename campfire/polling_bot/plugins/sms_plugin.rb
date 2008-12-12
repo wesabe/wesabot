@@ -27,7 +27,7 @@ class SMSPlugin < Campfire::PollingBot::Plugin
         bot.say("Here are the SMS addresses I have:")
         settings.each { |setting| bot.say("  #{setting.person} - #{setting.address}") }
       else
-        bot.say("Sorry, I don't have any sms addresses yet.")
+        bot.say("Sorry, I don't have any SMS addresses yet.")
       end
       return HALT
     when /(?:sms|text|txt)\s+([^\s:]+):?\s*(.*)/i
@@ -64,7 +64,7 @@ class SMSPlugin < Campfire::PollingBot::Plugin
       send_email(sender, setting.address, message)
       return setting.address
     else
-      bot.say("Sorry, I don't have an SMS address for #{$1}.")
+      bot.say("Sorry, I don't have an SMS address for #{recipient}.")
       return nil
     end
   end
