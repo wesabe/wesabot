@@ -6,8 +6,13 @@ class TweetPlugin < Campfire::PollingBot::Plugin
     case message.command
     when /^(?:tweet|twitter):?\s*("?)(.*?)\1$/i
       msg = strip_links($2)
-      send(msg)
-      bot.say("Ok, tweeted: #{msg}")
+      result = send(msg)
+      if result.status == 200
+        bot.say("Ok, tweeted: #{msg}")
+      else
+        bot.say("Hmm...didn't work. Got this response:")
+        bot.paste(result.content)
+      end
       return HALT
     end
   end
