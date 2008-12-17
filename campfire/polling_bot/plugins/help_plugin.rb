@@ -10,7 +10,13 @@ class HelpPlugin < Campfire::PollingBot::Plugin
       bot.say("Oh, too lazy to look at the damn source code? Fine:")
       help_msg = ''
       help = {}
-      bot.plugins.each { |plugin| help[plugin.to_s] = plugin.help if plugin.respond_to?(:help) }
+      bot.plugins.each do |plugin|
+        begin
+          help[plugin.to_s] = plugin.help if plugin.respond_to?(:help)
+        rescue Exception => e
+          puts "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+        end
+      end
       help.keys.sort.each do |plugin|
         help_msg << "#{plugin}:\n"
         help[plugin].each { |command, description| help_msg << " - #{command}\n     #{description}\n" }

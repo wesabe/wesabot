@@ -22,6 +22,10 @@ class Campfire
   #  the part of the body minus the bot name (and comma) is returned by #command
   class TextMessage < Message
     attr_accessor :command
+
+    def addressed_to_me?
+      not command.nil?
+    end
   end
 
   # a PasteMessage is sent when a paste block appears. #link contains the link to the full text of the
