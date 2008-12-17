@@ -24,16 +24,16 @@ class StatusPlugin < Campfire::PollingBot::Plugin
     return unless message.addressed_to_me?
 
     case message.command
-    when /(?:set)?\s+my\s+status(?:\s+is|to|:)\s*(.+)/i
+    when /(?:set\s+)?(?:my\s+)?\s+status(?:\s+is|to|:)\s*(.+)/i
       status = strip_quotes($1)
       update_status(message.person, status)
       return HALT
     when /I'm\s+(.+)/i
-      status = $1
+      status = strip_quotes($1)
       update_status(message.person, status)
       return HALT
     when /(?:show|list)\s+(\S+)?\s*status(?:es)?/i
-      person = $1.replace(/'s$/i, '')
+      person = $1.sub(/'s$/i, '')
       if person =~ /(everyone|all)/i
         show_statuses
       else
@@ -51,6 +51,12 @@ class StatusPlugin < Campfire::PollingBot::Plugin
      ["show <person>'s status", "show the status for <person>"],
      ["list all statuses", "show the statuses for everyone"],
      ["what's <person> up to?", "show the status for <person> -- works without addressing me"]]
+  end
+
+  private
+
+  def strip_quotes(string)
+    return string && string.gsub(/(['"])([^\1]*)(\1)/) { $2 }
   end
 
   def show_statuses
