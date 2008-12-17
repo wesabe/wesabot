@@ -24,7 +24,7 @@ class StatusPlugin < Campfire::PollingBot::Plugin
     return unless message.addressed_to_me?
 
     case message.command
-    when /(?:set\s+)?(?:my\s+)?\s+status(?:\s+is|to|:)\s*(.+)/i
+    when /(?:set\s+)?(?:my\s+)?status(?:\s+is|\s+to)(?:\s*:)?\s*(.+)/i
       status = strip_quotes($1)
       update_status(message.person, status)
       return HALT
