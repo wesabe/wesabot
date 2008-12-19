@@ -39,7 +39,6 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
     res = client.get("http://query.yahooapis.com/v1/public/yql", :q => query, :format => 'json')
     return [] unless res.status == 200
     result = JSON.parse(res.content)
-    puts result.inspect
     return [] if result["query"]["count"] == "0"
     photos = result["query"]["results"]["photo"]
     photos = [photos] if photos.is_a?(Hash)
