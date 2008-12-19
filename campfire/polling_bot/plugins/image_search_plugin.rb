@@ -49,7 +49,7 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
       bot.say("Sorry, we seem to have hit our query limit for the day.")
     else
       bot.say("Hmm...didn't work. Got this response:")
-      bot.paste(result.content)      
+      bot.paste(res.content)      
     end
   end
 end
