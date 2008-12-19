@@ -2,6 +2,14 @@ class StatusPlugin < Campfire::PollingBot::Plugin
   accepts :text_message
 
   def process(message)
+    if message.addressed_to_me?
+      case message.body
+      when /(what's|what is)\s+(everyone\s+)?(up(\s+to)?|doing|going\s+on|happening)/i
+        show_statuses
+        return HALT
+      end
+    end
+
     case message.body
     when /(?:what's|what is|where's|where is)\s+(\w+)/i
       person = $1
@@ -39,9 +47,6 @@ class StatusPlugin < Campfire::PollingBot::Plugin
       else
         show_status_for(person)
       end
-      return HALT
-    when /(what's|what is)\s+(everyone\s+)?(up(\s+to)?|doing|going\s+on|happening)/i
-      show_statuses
       return HALT
     end
   end
