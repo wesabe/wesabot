@@ -28,7 +28,7 @@ class StatusPlugin < Campfire::PollingBot::Plugin
       status = strip_quotes($1)
       update_status(message.person, status)
       return HALT
-    when /I(?:'m)|(?: am)\s+(.+)/i
+    when /(?:I'm|I am)\s+(.+)/i
       status = strip_quotes($1)
       update_status(message.person, status)
       return HALT
