@@ -5,7 +5,7 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
   
   def process(message)
     case message.command
-    when /(?:photo|image|picture)\s+of\s*(?:a\s*)?:?\s*("?)(.*?)\1$/i
+    when /(?:photo|image|picture)\s+of:?\s+(?:a:?\s+)?\s*("?)(.*?)\1$/i
       subject = $2
       photo_links = query_flickr(subject)
       if photo_links.empty?
@@ -41,7 +41,6 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
     result = JSON.parse(res.content)
     return [] if result["query"]["count"] == "0"
     photos = result["query"]["results"]["photo"]
-    #http://farm4.static.flickr.com/3016/2954249471_ed3f510a4e.jpg?v=0
     return photos.map {|p| "http://farm%s.static.flickr.com/%s/%s_%s.jpg?v=0" % [p['farm'], p['server'], p['id'], p['secret']]}
   end
 end
