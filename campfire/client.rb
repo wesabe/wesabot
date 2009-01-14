@@ -144,7 +144,11 @@ class Campfire
       # unescape content for Hpricot
       html = ''
       content.scan(/chat\.transcript\.queueMessage\((".*?"),\s+\d+\);/) do |body|
-        html << JSON.parse('[' + body.first + ']').first
+        begin
+          html << JSON.parse('[' + body.first + ']').first
+        rescue JSON::ParserError => e
+          puts "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+        end
       end
       # parse out messages
       doc = Hpricot(html)
