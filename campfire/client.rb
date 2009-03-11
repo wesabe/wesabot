@@ -115,7 +115,7 @@ class Campfire
       unless @membership_key
         puts "Joining room #{@room}" if @debug
         room_content = get_content(@base_uri + "/room/#{@room}")
-        if m = room_content.match(/new Campfire\.Chat\((.*?)\);/)
+        if m = room_content.match(/new Campfire\.Chat\(\{(.*?)\}\);/)
           chat_data = m[1]
           m = chat_data.match(/"?membershipKey"?\s*:\s*"(.*?)"/)
           @membership_key = m[1]
