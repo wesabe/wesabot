@@ -99,11 +99,11 @@ That list currently looks like:
 
     TweetPlugin:
      - tweet: <message>
-         post <message> to eng@wesabe.com's twitter account
+         post <message> to a twitter account
      - save tweet: <message>
          save <message> for later
      - show tweets
-         shows the queued tweets for eng@wesabe.com's twitter account
+         shows the queued tweets for a twitter account
      - show next tweet
          shows the oldest queued twitter message
      - post next tweet
