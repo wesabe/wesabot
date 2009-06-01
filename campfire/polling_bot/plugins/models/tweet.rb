@@ -23,7 +23,7 @@ class Tweet
     if result.status == 200
       return true
     else
-      raise TwitterErrror.new(result)
+      raise TwitterError.new(result)
     end
   end
 
