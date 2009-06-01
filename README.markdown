@@ -17,13 +17,13 @@ Installation
 You'll need SQLite3 installed (http://www.sqlite.org/), and a number of gems:
 
     sudo gem install dm-core do_sqlite3 httpclient hpricot json chronic
-  
+
 Then copy `wesabot-sample.rb` to `wesabot.rb` and add your Campfire credentials.
 
 Once Wes (or whatever you decide to name your bot) is running, you can see a list of available commands by entering into Campfire:
 
     Wes, help
-    
+
 That list currently looks like:
 
 
@@ -37,7 +37,7 @@ That list currently looks like:
 
     DeployPlugin:
      - what's on deck?
-         get shortlog of to-be-deployed changes for PFC
+         get shortlog of to-be-deployed changes for pfc
      - what's on deck for <project>?
          get the shortlog of to-be-deployed changes for a specific project
 
@@ -54,6 +54,10 @@ That list currently looks like:
     HelpPlugin:
      - help
          this message
+
+    ImageSearchPlugin:
+     - (photo|image|picture) of <subject>
+         find a random picture on flickr of <subject>
 
     ReloadPlugin:
      - reload
@@ -79,10 +83,32 @@ That list currently looks like:
      - list sms addresses
          list all sms addresses
 
+    StatusPlugin:
+     - set my status to: <status>
+         set your status
+     - show <person>'s status
+         show the status for <person>
+     - list all statuses
+         show the statuses for everyone
+     - what's <person> up to?
+         show the status for <person> -- works without addressing me
+
     TimePlugin:
      - time
          say the current time
 
     TweetPlugin:
-     - (tweet|twitter): <message>
-         post <message> to a twitter account
+     - tweet: <message>
+         post <message> to eng@wesabe.com's twitter account
+     - save tweet: <message>
+         save <message> for later
+     - show tweets
+         shows the queued tweets for eng@wesabe.com's twitter account
+     - show next tweet
+         shows the oldest queued twitter message
+     - post next tweet
+         sends the oldest queued twitter message
+     - post tweet <n>
+         sends the <n>th tweet from the list
+     - delete tweet <n>
+         deletes the <n>th tweet from the list
