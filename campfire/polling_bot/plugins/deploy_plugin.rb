@@ -22,7 +22,8 @@ class DeployPlugin < Campfire::PollingBot::Plugin
 
       info = project_info(project)
       if info.nil?
-        bot.say("Sorry #{message.person}, I don't know anything about #{project}.")
+        bot.say("Sorry #{message.person}, I don't know anything about #{project}. Here are the projects I do know about:")
+        bot.paste(projects.keys.sort.join("\n"))
         return HALT
       end
 

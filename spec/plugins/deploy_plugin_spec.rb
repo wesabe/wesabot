@@ -63,7 +63,8 @@ describe DeployPlugin do
 
       it "tells the sender when the project asked about does not exist" do
         asking("wes, what's on deck for foobar?").
-          should make_wes_say( %r{I don't know anything about foobar} )
+          should make_wes_say( %r{I don't know anything about foobar} ).
+                 and_paste("my_super_site\nother")
       end
 
       context "with no default project" do
