@@ -39,7 +39,11 @@ class DeployPlugin < Campfire::PollingBot::Plugin
     info = project_info(project)
     return nil if info.nil?
     result = %x{ cd #{repository_path(project)}; git shortlog #{treeish} }
-    return result if $?.exitstatus.zero?
+    if $?.exitstatus.zero?
+      return result
+    else
+      return "Nothing is on deck right now."
+    end
   end
 
   def deployed_revision(project)
