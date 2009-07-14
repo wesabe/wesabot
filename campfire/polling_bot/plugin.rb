@@ -38,7 +38,8 @@ class Campfire
 
       # bot accessor
       def self.bot; @@bot end
-      def bot; self.class.bot end
+      def bot; @bot || self.class.bot end
+      attr_writer :bot
 
       HALT = 1 # returned by a command when command processing should halt (continues by default)
 

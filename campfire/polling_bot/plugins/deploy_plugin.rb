@@ -5,36 +5,70 @@ class DeployPlugin < Campfire::PollingBot::Plugin
   def process(message)
     case message.command
     when /on deck(?: for ([^\s\?]+))?/
-      project = ($1 || config['default_project']).downcase
+      project = $1
+
+      if not projects.any?
+        bot.say("Sorry #{message.person}, I don't know about any projects. Please configure the deploy plugin.")
+        return HALT
+      end
+
+      project ||= default_project
+      if project.nil?
+        bot.say("Sorry #{message.person}, I don't have a default project. Here are the projects I do know about:")
+        bot.paste(projects.keys.sort.join("\n"))
+        return HALT
+      end
+      project.downcase!
+
       info = project_info(project)
       if info.nil?
         bot.say("Sorry #{message.person}, I don't know anything about #{project}.")
-      else
-        shortlog = project_shortlog(project, "#{deployed_revision(project)}..HEAD")
-
-        if shortlog.nil?
-          bot.say("Sorry #{message.person}, I couldn't get what's on deck for #{project}.")
-        else
-          bot.say("Here's what's on deck for #{project}:")
-          bot.paste(shortlog)
-        end
+        return HALT
       end
+
+      range = nil
+      begin
+        range = "#{deployed_revision(project)}..HEAD"
+        shortlog = project_shortlog(project, range)
+      rescue => e
+        bot.say("Sorry #{message.person}, I couldn't get what's on deck for #{project}, got a #{e.class}:")
+        bot.paste("#{e.message}\n\n#{e.backtrace.map{|l| "  #{l}\n"}}")
+        return HALT
+      end
+
+      if shortlog.nil? || shortlog =~ /^\s*$/
+        bot.say("There's nothing on deck for #{project} right now.")
+        return HALT
+      end
+
+      bot.say("Here's what's on deck for #{project}:")
+      bot.paste("$ git shortlog #{range}\n\n#{shortlog}")
 
       return HALT
     end
   end
 
   def help
-    [["what's on deck?", "get shortlog of to-be-deployed changes for #{config['default_project']}"],
-     ["what's on deck for <project>?", "get the shortlog of to-be-deployed changes for a specific project"]]
+    help_lines = [["what's on deck for <project>?", "get the shortlog of to-be-deployed changes for a specific project"]]
+    help_lines << ["what's on deck?", "get shortlog of to-be-deployed changes for #{default_project}"] unless default_project.nil?
+    return help_lines
+  end
+
+  def projects
+    (config && config['project']) || {}
+  end
+
+  def default_project
+    (config && config['default_project']) ||
+      (projects.size == 1 ? projects.keys.first : nil)
   end
 
   private
 
   def project_info(project)
-    config["project"][project]
+    projects[project]
   end
-  
+
   def project_shortlog(project, treeish)
     info = project_info(project)
     return nil if info.nil?
@@ -42,7 +76,7 @@ class DeployPlugin < Campfire::PollingBot::Plugin
     if $?.exitstatus.zero?
       return result
     else
-      return "Nothing is on deck right now."
+      raise "got non-zero exit status from git shortlog: #{$?.exitstatus}"
     end
   end
 
