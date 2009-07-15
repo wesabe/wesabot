@@ -14,6 +14,10 @@ class FakeBot < Campfire::PollingBot
     transcript << [:paste, message]
   end
 
+  def say_random(messages)
+    transcript << [:say, messages.first]
+  end
+
   def transcript
     @transcript ||= []
   end
@@ -26,31 +30,39 @@ Spec::Runner.configure do |s|
 
   def saying(what)
     bot = FakeBot.new
-    @plugin.bot = bot
+    @plugin.class.bot = bot
     message = Campfire::TextMessage.new(
       :body => what,
       :person => "John Tester"
     )
-    # FIXME: we call #addressed_to_me? here so that TextMessage#command gets set
-    bot.addressed_to_me?(message)
-    @plugin.process(message)
+    @plugin.process(message) if @plugin.accepts?(message)
     return bot.transcript
   end
 
   alias :asking :saying
 
   def make_wes_say(what)
-    MakeWesSend.new(:say, what)
+    MakeWesSend.new.and_say(what)
   end
 
   def make_wes_paste(what)
-    MakeWesSend.new(:paste, what)
+    MakeWesSend.new.and_paste(what)
+  end
+
+  def make_wes_say_something
+    MakeWesSaySomething.new
+  end
+
+  alias :make_wes_say_anything :make_wes_say_something
+
+  module MessagePrinter
+    def print_messages(messages)
+      messages.map {|e| "  #{e.first} #{e.last.inspect}"}.join("\n")
+    end
   end
 
   class MakeWesSend
-    def initialize(type, expected)
-      expect type, expected
-    end
+    include MessagePrinter
 
     def matches?(actual)
       @actual = actual
@@ -135,9 +147,22 @@ Spec::Runner.configure do |s|
     def expected
       @expected ||= []
     end
+  end
 
-    def print_messages(messages)
-      messages.map {|e| "  #{e.first} #{e.last.inspect}"}.join("\n")
+  class MakeWesSaySomething
+    include MessagePrinter
+
+    def matches?(actual)
+      actual.any?
+    end
+
+    def failure_message
+      "expected Wes to say something, but he didn't"
+    end
+
+    def negative_failure_message
+      "expected Wes not to say anything, but he did:\n\n" +
+        print_messages(@expected)
     end
   end
 end

@@ -2,7 +2,7 @@
 class KibitzPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
   priority -1
-  
+
   def process(message)
     person = message.person
     case message.command
@@ -19,13 +19,13 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
                  "I try.",
                  "Aw, shucks. Thanks, #{person}."]
       bot.say_random(sayings)
-    when /(^|you|still)\s*there/i
+    when /(^|you|still)\s*there/i, /\byt\b/i
       bot.say_random(%w{Yup y})
     when /(wake up|you awake)/i
       bot.say("Yo.")
     when /zod/i
-      sayings = ["Zod's a wanker.", 
-                 "I'd tell you about Zod, but you wouldn't listen. No one ever does.", 
+      sayings = ["Zod's a wanker.",
+                 "I'd tell you about Zod, but you wouldn't listen. No one ever does.",
                  "somebody send Zod back to the Phantom Zone",
                  "Zod and I were friends, once. It all ended one awful night in El Paso over a bottle of shitty scotch and a ten-dollar whore. Christ, those were the days."]
       bot.say_random(sayings)
@@ -43,7 +43,7 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
                  "Not now, #{person}.",
                  "brb crying",
                  "How do you feel when someone says '#{message.command}' to you, #{person}?"]
-      
+
       bot.say_random(sayings)
     end
   end

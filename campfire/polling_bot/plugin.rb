@@ -37,14 +37,18 @@ class Campfire
       end
 
       # bot accessor
-      def self.bot; @@bot end
-      def bot; @bot || self.class.bot end
+      class <<self
+        attr_accessor :bot
+      end
       attr_writer :bot
+      def bot
+        @bot || self.class.bot
+      end
 
       HALT = 1 # returned by a command when command processing should halt (continues by default)
 
       def self.load_all(bot)
-        @@bot = bot
+        self.bot = bot
 
         # load all models & plugins
         paths  = Dir.glob(File.dirname(__FILE__) + "/plugins/models/*.rb")
