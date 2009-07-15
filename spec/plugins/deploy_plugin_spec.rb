@@ -120,7 +120,7 @@ describe DeployPlugin do
       context "when there is something on deck" do
         before do
           @plugin.stub!(:project_shortlog).
-                  and_return("John Tester (1):\n    Fix homepage links.\n")
+                  and_return("John Tester (1):\n    Fix homepage links.\n\n")
         end
 
         it "responds with the shortlog for the project" do
@@ -131,6 +131,7 @@ $ git shortlog abcde..HEAD
 
 John Tester (1):
     Fix homepage links.
+
 EOS
         end
       end

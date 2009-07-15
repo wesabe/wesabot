@@ -30,6 +30,7 @@ class DeployPlugin < Campfire::PollingBot::Plugin
       range = nil
       begin
         range = "#{deployed_revision(project)}..HEAD"
+        puts "asking for shortlog in range #{range}" if bot.debug
         shortlog = project_shortlog(project, range)
       rescue => e
         bot.say("Sorry #{message.person}, I couldn't get what's on deck for #{project}, got a #{e.class}:")
@@ -37,7 +38,7 @@ class DeployPlugin < Campfire::PollingBot::Plugin
         return HALT
       end
 
-      if shortlog.nil? || shortlog =~ /^\s*$/
+      if shortlog.nil? || shortlog =~ /\A\s*\Z/
         bot.say("There's nothing on deck for #{project} right now.")
         return HALT
       end

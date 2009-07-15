@@ -5,7 +5,7 @@ class Campfire
     attr_accessor :client
     attr_accessor :debug
     attr_accessor :name
-    
+
     def initialize(params = {})
       # if the name of the bot isn't provided, use the first part of the email address
       self.name = params[:name] || params[:username].gsub('@.*','')
