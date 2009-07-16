@@ -37,8 +37,11 @@ class Campfire
       end
 
       # bot accessor
-      class <<self
-        attr_accessor :bot
+      def self.bot
+        @@bot
+      end
+      def self.bot=(bot)
+        @@bot = bot
       end
       attr_writer :bot
       def bot

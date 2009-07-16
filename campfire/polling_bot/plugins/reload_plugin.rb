@@ -1,7 +1,7 @@
 # Plugin to allow Wes to update and reload himself
 class ReloadPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
-  
+
   def process(message)
     case message.command
     when /^reload/i
