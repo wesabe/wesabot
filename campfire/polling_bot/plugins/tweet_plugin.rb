@@ -68,7 +68,7 @@ class TweetPlugin < Campfire::PollingBot::Plugin
     begin
       Tweet.tweet(tweet.to_s, config['username'], config['password'], config['proxy'])
       bot.say("Ok, tweeted: #{tweet}")
-    rescue TwitterError => ex
+    rescue Tweet::TwitterError => ex
       bot.say("Hmm...didn't work. Got this response:")
       bot.paste(ex.http_result.content)
     end
