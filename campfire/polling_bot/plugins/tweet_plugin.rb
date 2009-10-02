@@ -29,14 +29,14 @@ class TweetPlugin < Campfire::PollingBot::Plugin
         bot.say("Next tweet to post: #{list.first}")
       end
       return HALT
-    when /^(post|send)\s+next\s+(?:tweet|twitter)$/i
+    when /^(?:post|send)\s+next\s+(?:tweet|twitter)$/i
       act_on_list do |list|
         tweet = list.first
         post_tweet(tweet)
         tweet.destroy
       end
       return HALT
-    when /^(post|send)\s+tweet\s+(\d+)$/i
+    when /^(?:post|send)\s+tweet\s+(\d+)$/i
       act_on_tweet($1.to_i-1) do |tweet|
         post_tweet(tweet)
         tweet.destroy
