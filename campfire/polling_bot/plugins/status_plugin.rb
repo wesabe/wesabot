@@ -41,7 +41,7 @@ class StatusPlugin < Campfire::PollingBot::Plugin
       update_status(message.person, status)
       return HALT
     when /(?:show|list)\s+(\S+)?\s*status(?:es)?/i
-      person = $1.sub(/'s$/i, '')
+      person = $1 ? $1.sub(/'s$/i, '') : 'all'
       if person =~ /(everyone|all)/i
         show_statuses
       else
