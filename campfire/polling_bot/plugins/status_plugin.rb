@@ -1,5 +1,6 @@
 class StatusPlugin < Campfire::PollingBot::Plugin
   accepts :text_message
+  priority -1
 
   def process(message)
     if message.addressed_to_me?
