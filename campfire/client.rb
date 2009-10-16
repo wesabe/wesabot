@@ -99,8 +99,9 @@ class Campfire
     def say_one(message, paste=false)
       puts "Posting #{message}" if @debug
       params = { :message => message.to_s }
+      headers = { 'X-Requested-With' => 'XMLHttpRequest' }
       params[:paste] = paste if paste
-      post_content(@base_uri + "/room/#{@room}/speak", params)
+      post_content(@base_uri + "/room/#{@room}/speak", params, headers)
     end
 
     # pick something at random from an array of sayings
