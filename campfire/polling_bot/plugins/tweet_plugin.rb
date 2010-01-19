@@ -1,7 +1,8 @@
 # plugin to send a tweet to a Twitter account
 class TweetPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
-
+  priority 20
+  
   def process(message)
     case message.command
     when /^(?:tweet|twitter):?\s*("?)(.*?)\1$/i
