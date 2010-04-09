@@ -16,7 +16,7 @@ Installation
 
 You'll need SQLite3 installed (http://www.sqlite.org/), and a number of gems:
 
-    sudo gem install dm-core do_sqlite3 httpclient hpricot json chronic
+    sudo gem install dm-core do_sqlite3 activesupport httparty mime-types chronic
 
 Then copy `wesabot-sample.rb` to `wesabot.rb` and add your Campfire credentials.
 
