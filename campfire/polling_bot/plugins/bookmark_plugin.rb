@@ -31,7 +31,7 @@ class BookmarkPlugin < Campfire::PollingBot::Plugin
   def save_bookmark(message, name)
     Bookmark.create(:person => message.person, 
                     :name => name, 
-                    :room => bot.room,
+                    :room => bot.room.id,
                     :message_id => message.message_id, 
                     :timestamp => Time.now)
   end

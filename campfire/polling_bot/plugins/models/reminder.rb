@@ -4,5 +4,5 @@ class Reminder
   property :id,            Serial
   property :person,        String, :index => true
   property :action,        Text, :lazy => false
-  property :reminder_time, Time, :nullable => false, :index => true
+  property :reminder_time, Time, :required => true, :index => true
 end

@@ -3,17 +3,19 @@ require 'cgi'
 
 class Campfire
   # base message class. All messages have a message_id, timestamp, person (first name of the user generating
-  # the message), person_full_name (first name + last initial of the user generating the message (TODO: instead
-  # grab the user's actual full name from the sidebar)), and body, which is the text of the message
+  # the message), person_full_name, and body, which is the text of the message
   class Message
-    attr_accessor :message_id, :timestamp, :person, :person_full_name, :body
+    attr_accessor :message_id, :timestamp, :person, :person_full_name, :body, :type
   
     def initialize(params)
-      self.message_id = params[:message_id]
-      self.timestamp = params[:timestamp] || Time.now
-      self.person_full_name = params[:person]
-      self.person = person_full_name.split(' ')[0] # just get first name
-      self.body =  CGI.unescapeHTML(params[:body]) if params[:body]
+      self.message_id = params[:id]
+      self.timestamp = params[:created_at] || Time.now
+      if params[:user]
+        self.person_full_name = params[:user][:name]
+        self.person = person_full_name.split(' ').first # just get first name
+      end
+      self.body = params[:body]
+      self.type = params[:type].gsub(/(.*?)Message$/, '\1')
     end
   end
   

@@ -10,9 +10,9 @@ class Tweet
 
   include DataMapper::Resource
   property :id,        Serial
-  property :message,   String, :nullable => false
+  property :message,   String, :required => true
   property :person,    String
-  property :timestamp, Integer, :nullable => false
+  property :timestamp, Integer, :required => true
 
   def tweet(user, pass, proxy=nil)
     self.class.tweet(message, user, pass, proxy)
@@ -20,10 +20,10 @@ class Tweet
 
   def self.tweet(message, user, pass, proxy=nil)
     result = post(message, user, pass, proxy)
-    if result.status == 200
+    if result.code == 200
       return true
     else
-      raise TwitterError.new(result)
+      raise TwitterError.new(result.body)
     end
   end
 
@@ -39,18 +39,14 @@ class Tweet
 
   # post a message to twitter
   def self.post(message, user, pass, proxy=nil)
-    client(user, pass, proxy).post("http://twitter.com/statuses/update.xml", :status => message)
-  end
-
-  # set up the http client
-  def self.client(user, pass, proxy=nil)
-    proxy ||= ENV['HTTP_PROXY']
-
-    @clients ||= {}
-    @clients["#{user}:#{pass}:#{proxy}"] ||= begin
-      client = HTTPClient.new(proxy)
-      client.set_auth("http://twitter.com", user, pass)
-      client
+    options = { 
+      :query => {:status => message}, 
+      :basic_auth => {:username => user, :password => pass} 
+    }
+    if proxy ||= ENV['HTTP_PROXY'] 
+      proxy_uri = URI.parse(proxy)
+      options.update(:http_proxyaddr => proxy_uri.host, :http_proxyport => proxy_uri.port)
     end
+    HTTParty.post("http://twitter.com/statuses/update.xml", options)
   end
 end

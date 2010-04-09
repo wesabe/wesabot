@@ -19,13 +19,15 @@ class HistoryPlugin < Campfire::PollingBot::Plugin
   private
   
   def save_message(message)
-    Message.create(
-      :room => bot.room,
+    params = {
+      :room => bot.room.id,
       :message_id => message.message_id,
-      :message_type => message.class.to_s.gsub(/Campfire::(.*?)Message$/, '\1'),
+      :message_type => message.type,
       :person => message.respond_to?(:person_full_name) ? message.person_full_name : nil,
       :link => message.respond_to?(:link) ? message.link : nil,
       :body => message.respond_to?(:body) ? message.body : nil,
-      :timestamp => message.timestamp.to_i)
+      :timestamp => message.timestamp.to_i
+    }
+    Message.create(params) 
   end
 end

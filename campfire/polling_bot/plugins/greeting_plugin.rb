@@ -75,7 +75,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   # only give the link if they've been gone for more than 2 minutes
   def catch_up_link(person_full_name)
     if message_id = last_message_id(person_full_name)
-      return "#{bot.base_uri}/room/#{bot.room}/transcript/message/#{message_id}"
+      return "#{bot.base_uri}/room/#{bot.room.id}/transcript/message/#{message_id}"
     end
   end
   
@@ -99,7 +99,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
       candidates.each do |row|
         if row.body.match(future_person)
           verbed = verbs[rand(verbs.size)]
-          future_messages << "#{row.person} #{verbed} future #{person} at: #{bot.base_uri}/room/#{bot.room}/transcript/message/#{row.message_id}"
+          future_messages << "#{row.person} #{verbed} future #{person} at: #{bot.base_uri}/room/#{bot.room.id}/transcript/message/#{row.message_id}"
         elsif row.body.match(future_everybody)
           verbed = verbs[rand(verbs.size)]
           future_messages << "#{row.person} #{verbed} future everybody: \"#{row.body}\""

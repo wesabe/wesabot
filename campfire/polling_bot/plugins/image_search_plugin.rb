@@ -25,31 +25,27 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
   
   private
   
-  # set up the http client
-  def client
-    unless @client
-      proxy = (config && config['proxy']) || ENV['HTTP_PROXY']
-      @client = HTTPClient.new(proxy)
-    end
-    return @client
-  end
-  
   # post a message to twitter
   def query_flickr(subject)
-    query = "select * from flickr.photos.search where text=\"#{subject}\""
-    res = client.get("http://query.yahooapis.com/v1/public/yql", :q => query, :format => 'json')
-    case res.status
+    # URI.encode shouldn't be necessary, but datamapper's extlib implements Hash#to_params incorrectly
+    query = URI.encode("select * from flickr.photos.search where text=\"#{subject}\"")
+    options = { :query => {:q => query, :format => 'json'} }
+    if proxy = (config && config['proxy']) || ENV['HTTP_PROXY']
+      proxy_uri = URI.parse(proxy)
+      options.update(:http_proxyaddr => proxy_uri.host, :http_proxyport => proxy_uri.port)
+    end
+    response = HTTParty.get("http://query.yahooapis.com/v1/public/yql", options)
+    case response.code
     when 200
-      result = JSON.parse(res.content)
-      return [] if result["query"]["count"] == "0"
-      photos = result["query"]["results"]["photo"]
+      return [] if response["query"]["count"] == "0"
+      photos = response["query"]["results"]["photo"]
       photos = [photos] if photos.is_a?(Hash)
       return photos.map {|p| "http://farm%s.static.flickr.com/%s/%s_%s.jpg?v=0" % [p['farm'], p['server'], p['id'], p['secret']]}
     when 403
       bot.say("Sorry, we seem to have hit our query limit for the day.")
     else
       bot.say("Hmm...didn't work. Got this response:")
-      bot.paste(res.content)      
+      bot.paste(response.body)      
     end
   end
 end
