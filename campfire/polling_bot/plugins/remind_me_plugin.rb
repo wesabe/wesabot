@@ -76,6 +76,7 @@ class RemindMePlugin < Campfire::PollingBot::Plugin
     return unless (@heartbeat_counter % 3) == 1
     due_reminders.each do |reminder|
       bot.say("#{reminder.person}, I'm reminding you to #{reminder.action}")
+      reminder.destroy!
     end
   end
   
@@ -91,10 +92,7 @@ class RemindMePlugin < Campfire::PollingBot::Plugin
   private
 
   def due_reminders
-    time_now = Time.now
-    reminders = Reminder.all(:reminder_time.lte => time_now).dup
-    Reminder.all(:reminder_time.lte => time_now).destroy!
-    return reminders
+    Reminder.all(:reminder_time.lte => Time.now)
   end
   
   def list_reminders(current_person, request_person)
