@@ -1,3 +1,6 @@
+
+*NOTE:* Development has moved over to [http://github.com/hackarts/wesabot]()
+
 Wesabot
 =======
 
