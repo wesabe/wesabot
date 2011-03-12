@@ -1,5 +1,5 @@
 
-*NOTE:* Development has moved over to [http://github.com/hackarts/wesabot]()
+**NOTE:** Development has moved over to [http://github.com/hackarts/wesabot](http://github.com/hackarts/wesabot)
 
 Wesabot
 =======
